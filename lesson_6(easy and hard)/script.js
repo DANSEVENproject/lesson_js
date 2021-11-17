@@ -6,10 +6,10 @@ let count = 10;
 function checkNumber(num) {
     return !isNaN(parseFloat(num)) && isFinite(num);
 }
-let numb;
+
 let correctNumber = function() {
 
-    numb = prompt('Введите число.');
+    let numb = prompt('Введите число.');
     if (numb === null) {
         alert('Игра окончена.');
         return numb;
@@ -37,7 +37,6 @@ let countAttempts = function() {
             complete = confirm('Попытки закончились, хотите сыграть еще?'),
             complete ? (
                 count = 10,
-                randomNum(),
                 answerInput()
             ) : (
                 alert('Ясно, понятно, до свидания!')
@@ -60,7 +59,6 @@ let comprasionRandom = function(answer, randomNumber) {
         let complete = confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
         complete ? (
             count = 10,
-            randomNum(),
             answerInput()
         ) : (
             alert('Ясно, понятно, до свидания!')
@@ -68,15 +66,11 @@ let comprasionRandom = function(answer, randomNumber) {
     }
 }
 
-let random;
-let randomNum = function() {
-
-    (function getRandom() {
-        random = Math.floor(Math.random() * 100);
-        if (random === 0) randomNum();
-        return random;
-    })();
+function randomInteger(min, max) {
+    let rand = min - 0.5 + Math.random() * (max - min + 1);
+    return Math.round(rand);
 }
+const random = randomInteger(1, 100);
 
 let answerInput = function() {
 
@@ -85,11 +79,9 @@ let answerInput = function() {
     if (answerUser === null) return alert('Игра окончена.');
     if (!checkNumber(answerUser)) {
         answerUser = correctNumber();
-    } else if (answerUser > 100 && answerUser <= 0) falseNumber(answerUser);
-
+    }
+    if (answerUser > 100 || answerUser <= 0) falseNumber(answerUser);
     if (answerUser) comprasionRandom(answerUser, random);
-
 }
 
-randomNum();
 answerInput();

@@ -1,8 +1,6 @@
 'use strict'
 
-let money;
-
-let appData = {
+const appData = {
     income: {},
     addIncome: [],
     expenses: {},
@@ -13,9 +11,9 @@ let appData = {
     mission: 30000,
     budgetDay: 0,
     period: 3,
-    budget: money,
+    budget: 0,
     asking: function() {
-        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую.');
+        const addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую.');
         appData.addExpenses = (addExpenses.toLowerCase()).split(', ');
         appData.deposit = confirm('Есть ли у вас депозит в банке?');
         for (let i = 0; i < 2; i++) {
