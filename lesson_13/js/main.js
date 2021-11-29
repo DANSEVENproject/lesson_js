@@ -1,20 +1,22 @@
 'use strict';
 
-const listFunction = {
-    toDo: document.querySelector('#todo'),
-    inputAddItem: document.querySelector('.header-input'),
-    addButtonList: document.querySelector('.header-button'),
-    toComplete: document.querySelector('#completed'),
-    container: document.querySelector('.container'),
+class List {
+
+    toDo = document.querySelector('#todo');
+    inputAddItem = document.querySelector('.header-input');
+    addButtonList = document.querySelector('.header-button');
+    toComplete = document.querySelector('#completed');
+    container = document.querySelector('.container');
+
     del(element) {
         element.remove('todo-item');
-        element.removeEventListener('click', function() {
-            listFunction.del(newLi);
-            listFunction.save();
+        element.removeEventListener('click', () => {
+            this.del(newLi);
+            this.save();
         });
-    },
+    }
     addComplete(element, value) {
-        listFunction.del(element);
+        this.del(element);
         const newLi = document.createElement('li');
         const buttonAdd = document.createElement('button');
         const buttonRemove = document.createElement('button');
@@ -33,15 +35,15 @@ const listFunction = {
         newLi.appendChild(buttonWrapper);
         newLi.appendChild(spanText);
         this.toComplete.insertAdjacentElement('afterbegin', newLi);
-        buttonAdd.addEventListener('click', function() {
-            listFunction.addComplete(newLi);
-            listFunction.save();
+        buttonAdd.addEventListener('click', () => {
+            this.addComplete(newLi);
+            this.save();
         });
-        buttonRemove.addEventListener('click', function() {
-            listFunction.del(newLi);
-            listFunction.save();
+        buttonRemove.addEventListener('click', () => {
+            this.del(newLi);
+            this.save();
         })
-    },
+    }
     addList() {
         if (this.inputAddItem.value !== '') {
             const newLi = document.createElement('li');
@@ -62,61 +64,63 @@ const listFunction = {
             newLi.appendChild(buttonWrapper);
             newLi.appendChild(spanText);
             this.toDo.insertAdjacentElement('afterbegin', newLi);
-            buttonAdd.addEventListener('click', function() {
-                listFunction.addComplete(newLi, spanText.textContent);
-                listFunction.save();
+            buttonAdd.addEventListener('click', () => {
+                this.addComplete(newLi, spanText.textContent);
+                this.save();
             });
-            buttonRemove.addEventListener('click', function() {
-                listFunction.del(newLi);
-                listFunction.save();
+            buttonRemove.addEventListener('click', () => {
+                this.del(newLi);
+                this.save();
             })
             this.inputAddItem.value = '';
         }
-    },
+    }
     completion(list, index) {
         const newLi = list.querySelectorAll('li')[index];
         const buttonAdd = list.querySelectorAll('.todo-complete')[index];
         const buttonRemove = list.querySelectorAll('.todo-remove')[index];
         const spanText = list.querySelectorAll('.todo-description')[index];
 
-        buttonAdd.addEventListener('click', function() {
-            listFunction.addComplete(newLi, spanText.textContent);
-            listFunction.save();
+        buttonAdd.addEventListener('click', () => {
+            this.addComplete(newLi, spanText.textContent);
+            this.save();
         });
-        buttonRemove.addEventListener('click', function() {
-            listFunction.del(newLi);
-            listFunction.save();
+        buttonRemove.addEventListener('click', () => {
+            this.del(newLi);
+            this.save();
         })
-    },
+    }
     init() {
-        this.getLocalStorage();
-        this.toDo = document.querySelector('#todo');
-        this.inputAddItem = document.querySelector('.header-input');
-        this.addButtonList = document.querySelector('.header-button');
-        this.toComplete = document.querySelector('#completed');
-        this.container = document.querySelector('.container');
-        for (let i = 0; i < this.toDo.childElementCount; i++) {
-            this.completion(this.toDo, i);
+        if (localStorage.getItem('toDo')) {
+            this.getLocalStorage();
+            this.toDo = document.querySelector('#todo');
+            this.inputAddItem = document.querySelector('.header-input');
+            this.addButtonList = document.querySelector('.header-button');
+            this.toComplete = document.querySelector('#completed');
+            this.container = document.querySelector('.container');
+            for (let i = 0; i < this.toDo.childElementCount; i++) {
+                this.completion(this.toDo, i);
+            }
+            for (let i = 0; i < this.toComplete.childElementCount; i++) {
+                this.completion(this.toComplete, i);
+            }
         }
-        for (let i = 0; i < this.toComplete.childElementCount; i++) {
-            this.completion(this.toComplete, i);
-        }
-
-        this.addButtonList.addEventListener('click', function() {
-                listFunction.addList();
-                listFunction.save();
+        this.addButtonList.addEventListener('click', () => {
+                this.addList();
+                this.save();
             }),
-            document.addEventListener('change', function() {
-                listFunction.addList();
-                listFunction.save();
+            document.addEventListener('change', () => {
+                this.addList();
+                this.save();
             })
-    },
+    }
     getLocalStorage() {
         this.container.innerHTML = localStorage.getItem('toDo');
-    },
+    }
     save() {
         const html = this.container.innerHTML;
         localStorage.setItem('toDo', html);
     }
 }
-listFunction.init();
+const list = new List();
+list.init();
