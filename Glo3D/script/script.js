@@ -14,6 +14,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 seconds = Math.floor(timeRemaining % 60),
                 minutes = Math.floor((timeRemaining / 60) % 60),
                 hours = Math.floor(timeRemaining / 60 / 60);
+
+            while (hours >= 24) {
+                hours = Math.floor(hours % 24);
+            }
             return { timeRemaining, hours, minutes, seconds };
         }
 
